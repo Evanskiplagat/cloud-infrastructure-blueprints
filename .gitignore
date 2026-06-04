@@ -1,0 +1,24 @@
+# Terraform local state and plan artifacts.
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+
+# Environment variable files and local overrides.
+*.env
+*.local
+
+# Editor and operating system files.
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Build and package outputs.
+dist/
+coverage/
+node_modules/
+
+# Python cache files from local verification.
+__pycache__/
+*.pyc

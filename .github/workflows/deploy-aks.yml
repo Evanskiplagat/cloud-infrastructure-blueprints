@@ -1,0 +1,52 @@
+name: deploy-aks
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - kubernetes/**
+      - .github/workflows/deploy-aks.yml
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      # Pull the repository so manifests can be applied to the cluster.
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Log in to Azure using workload identity or repository secrets.
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Fetch AKS credentials for the target cluster and resource group.
+      - name: Get AKS credentials
+        uses: azure/aks-set-context@v4
+        with:
+          resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+
+      # Apply namespace, configuration, workload, service, ingress, and autoscaling assets in dependency order.
+      - name: Deploy Kubernetes manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          kubectl apply -f kubernetes/namespaces/platform.yaml
+          kubectl apply -f kubernetes/secrets/app-configmap.yaml
+          kubectl apply -f kubernetes/secrets/app-secret.yaml
+          kubectl apply -f kubernetes/deployments/app-deployment.yaml
+          kubectl apply -f kubernetes/deployments/app-service.yaml
+          kubectl apply -f kubernetes/ingress/app-ingress.yaml
+          kubectl apply -f kubernetes/autoscaling/app-hpa.yaml
+          kubectl rollout status deployment/platform-web -n platform-demo --timeout=180s
+

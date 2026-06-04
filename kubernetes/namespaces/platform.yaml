@@ -1,0 +1,9 @@
+# Create a dedicated namespace so workloads, quotas, and policies can be isolated cleanly.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: platform-demo
+  labels:
+    environment: dev
+    workload: cloud-infrastructure-blueprints
+

@@ -1,0 +1,34 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate-repository:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the repository so workflow jobs can access the codebase.
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Fail fast if Terraform formatting drifts from the repository standard.
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Check Terraform formatting
+        run: terraform fmt -check -recursive
+
+      # Lint YAML content to catch indentation and syntax issues early.
+      - name: Lint YAML files
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: .
+          config_data: |
+            extends: default
+            rules:
+              line-length:
+                max: 160
+                level: warning

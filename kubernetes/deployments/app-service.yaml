@@ -1,0 +1,15 @@
+# Expose the sample workload internally so ingress can route traffic to it.
+apiVersion: v1
+kind: Service
+metadata:
+  name: platform-web
+  namespace: platform-demo
+spec:
+  selector:
+    app: platform-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+

@@ -1,0 +1,37 @@
+name: test
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  repository-tests:
+    runs-on: ubuntu-latest
+    steps:
+      # Pull the repository contents into the runner.
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Install Terraform to run syntax and initialization checks.
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # Run initialization without backend configuration because this is a portfolio repository.
+      - name: Terraform init and validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          for dir in terraform/landing-zone terraform/networking terraform/aks-cluster terraform/monitoring; do
+            terraform -chdir="$dir" init -backend=false
+            terraform -chdir="$dir" validate
+          done
+
+      # Use kubeconform to validate manifest schemas against the Kubernetes API.
+      - name: Validate Kubernetes manifests with kubeconform
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -v "$PWD:/workdir" -w /workdir ghcr.io/yannh/kubeconform:latest \
+            -strict \
+            -summary \
+            $(find kubernetes -type f -name '*.yaml')

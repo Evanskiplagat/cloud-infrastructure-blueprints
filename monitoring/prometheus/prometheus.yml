@@ -1,0 +1,22 @@
+# Prometheus scrape configuration for Kubernetes workloads and self-monitoring.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - ../alerts/aks-alert-rules.yml
+
+scrape_configs:
+  # Scrape Prometheus itself to validate target health and scrape latency.
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - localhost:9090
+
+  # Scrape the demo application using the service DNS name inside the cluster.
+  - job_name: platform-web
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - platform-web.platform-demo.svc.cluster.local:80
+
