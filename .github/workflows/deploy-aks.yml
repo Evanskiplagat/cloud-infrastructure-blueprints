@@ -43,10 +43,14 @@ jobs:
           set -euo pipefail
           kubectl apply -f kubernetes/namespaces/platform.yaml
           kubectl apply -f kubernetes/secrets/app-configmap.yaml
-          kubectl apply -f kubernetes/secrets/app-secret.yaml
+          kubectl create secret generic platform-web-secrets \
+            --namespace platform-demo \
+            --from-literal=API_KEY="${{ secrets.PLATFORM_WEB_API_KEY }}" \
+            --from-literal=DATABASE_URL="${{ secrets.PLATFORM_WEB_DATABASE_URL }}" \
+            --dry-run=client \
+            -o yaml | kubectl apply -f -
           kubectl apply -f kubernetes/deployments/app-deployment.yaml
           kubectl apply -f kubernetes/deployments/app-service.yaml
           kubectl apply -f kubernetes/ingress/app-ingress.yaml
           kubectl apply -f kubernetes/autoscaling/app-hpa.yaml
           kubectl rollout status deployment/platform-web -n platform-demo --timeout=180s
-

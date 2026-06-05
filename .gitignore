@@ -7,6 +7,7 @@
 # Environment variable files and local overrides.
 *.env
 *.local
+kubernetes/secrets/app-secret.yaml
 
 # Editor and operating system files.
 .DS_Store

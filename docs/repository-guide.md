@@ -29,4 +29,4 @@ This document explains how the repository is organized and how the example asset
 - Store runtime secrets in Azure Key Vault or an external secrets operator rather than Git.
 - Use OIDC-based GitHub Actions federation instead of long-lived Azure service principal secrets where possible.
 - Restrict AKS ingress exposure with TLS, WAF, and IP filtering in production.
-
+- The AKS deployment workflow creates `platform-web-secrets` from GitHub Actions secrets `PLATFORM_WEB_API_KEY` and `PLATFORM_WEB_DATABASE_URL`; keep `kubernetes/secrets/app-secret.example.yaml` as a local-only reference.
