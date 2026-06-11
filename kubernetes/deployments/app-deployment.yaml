@@ -22,8 +22,17 @@ spec:
     spec:
       containers:
         - name: web
-          image: ghcr.io/example/cloud-infrastructure-blueprints:latest
+          # The CD workflow replaces this placeholder with the commit-specific image tag before rollout.
+          image: ghcr.io/replace-me/cloud-infrastructure-blueprints:latest
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 10001
+            capabilities:
+              drop:
+                - ALL
           ports:
             - containerPort: 8080
           envFrom:
@@ -50,4 +59,3 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
-

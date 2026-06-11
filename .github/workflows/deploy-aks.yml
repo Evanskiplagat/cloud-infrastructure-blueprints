@@ -41,6 +41,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          IMAGE="ghcr.io/${{ github.repository }}:${{ github.sha }}"
           kubectl apply -f kubernetes/namespaces/platform.yaml
           kubectl apply -f kubernetes/secrets/app-configmap.yaml
           kubectl create secret generic platform-web-secrets \
@@ -50,6 +51,7 @@ jobs:
             --dry-run=client \
             -o yaml | kubectl apply -f -
           kubectl apply -f kubernetes/deployments/app-deployment.yaml
+          kubectl set image deployment/platform-web web="$IMAGE" -n platform-demo
           kubectl apply -f kubernetes/deployments/app-service.yaml
           kubectl apply -f kubernetes/ingress/app-ingress.yaml
           kubectl apply -f kubernetes/autoscaling/app-hpa.yaml

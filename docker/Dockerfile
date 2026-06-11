@@ -5,9 +5,11 @@ FROM python:3.12-alpine
 WORKDIR /app
 COPY server.py /app/server.py
 COPY index.html /app/index.html
+RUN adduser -D -u 10001 appuser && chown -R appuser:appuser /app
 
 # Expose the application port expected by the Kubernetes manifests.
 EXPOSE 8080
 
 # Start the demo application.
+USER appuser
 CMD ["python", "/app/server.py"]

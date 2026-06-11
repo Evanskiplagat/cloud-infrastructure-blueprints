@@ -2,23 +2,22 @@
 groups:
   - name: platform-web.rules
     rules:
-      - alert: PlatformWebHighCpu
-        expr: sum(rate(container_cpu_usage_seconds_total{namespace="platform-demo"}[5m])) > 0.8
-        for: 10m
-        labels:
-          severity: warning
-          service: platform-web
-        annotations:
-          summary: "Platform web workload CPU usage is elevated"
-          description: "Average CPU usage for the platform-demo workload has remained high for 10 minutes."
-
-      - alert: PlatformWebReplicasUnavailable
-        expr: kube_deployment_status_replicas_available{namespace="platform-demo",deployment="platform-web"} < 2
+      - alert: PlatformWebDown
+        expr: up{job="platform-web"} == 0
         for: 5m
         labels:
           severity: critical
           service: platform-web
         annotations:
-          summary: "Platform web deployment has insufficient replicas"
-          description: "The platform-web deployment has fewer than two available replicas."
+          summary: "Platform web metrics endpoint is unavailable"
+          description: "Prometheus has not been able to scrape the platform-web target for 5 minutes."
 
+      - alert: PlatformWebTrafficMissing
+        expr: increase(demo_http_requests_total{job="platform-web"}[15m]) < 1
+        for: 15m
+        labels:
+          severity: warning
+          service: platform-web
+        annotations:
+          summary: "Platform web is receiving no traffic"
+          description: "The demo workload has not reported any HTTP requests during the last 15 minutes."

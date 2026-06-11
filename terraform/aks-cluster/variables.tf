@@ -28,6 +28,17 @@ variable "kubernetes_version" {
   default     = "1.29.4"
 }
 
+variable "tenant_id" {
+  description = "Microsoft Entra tenant ID used for AKS Azure RBAC integration."
+  type        = string
+}
+
+variable "automatic_upgrade_channel" {
+  description = "AKS automatic upgrade channel."
+  type        = string
+  default     = "patch"
+}
+
 variable "aks_subnet_id" {
   description = "Subnet ID where AKS nodes will be attached."
   type        = string
@@ -47,4 +58,3 @@ variable "tags" {
     managedBy   = "terraform"
   }
 }
-

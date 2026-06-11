@@ -28,7 +28,7 @@ resource "azurerm_monitor_action_group" "platform" {
 
 # Example CPU alert that can be targeted at an AKS node resource or another Azure resource.
 resource "azurerm_monitor_metric_alert" "high_cpu" {
-  name                = "alert-high-cpu-dev"
+  name                = var.metric_alert_name
   resource_group_name = data.azurerm_resource_group.platform.name
   scopes              = [var.target_resource_id]
   description         = "Alert when CPU usage remains high for the evaluation window."
@@ -49,4 +49,3 @@ resource "azurerm_monitor_metric_alert" "high_cpu" {
     action_group_id = azurerm_monitor_action_group.platform.id
   }
 }
-

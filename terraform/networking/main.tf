@@ -14,7 +14,7 @@ resource "azurerm_virtual_network" "platform" {
 
 # Create a shared NSG to enforce baseline ingress restrictions.
 resource "azurerm_network_security_group" "platform" {
-  name                = "nsg-cib-platform-dev"
+  name                = var.nsg_name
   location            = data.azurerm_resource_group.platform.location
   resource_group_name = data.azurerm_resource_group.platform.name
   tags                = var.tags
@@ -34,14 +34,14 @@ resource "azurerm_network_security_group" "platform" {
 
 # Separate the application tier from cluster infrastructure for cleaner routing and policy boundaries.
 resource "azurerm_subnet" "app" {
-  name                 = "snet-app-dev"
+  name                 = var.app_subnet_name
   resource_group_name  = data.azurerm_resource_group.platform.name
   virtual_network_name = azurerm_virtual_network.platform.name
   address_prefixes     = var.app_subnet_prefixes
 }
 
 resource "azurerm_subnet" "aks" {
-  name                 = "snet-aks-dev"
+  name                 = var.aks_subnet_name
   resource_group_name  = data.azurerm_resource_group.platform.name
   virtual_network_name = azurerm_virtual_network.platform.name
   address_prefixes     = var.aks_subnet_prefixes
@@ -57,4 +57,3 @@ resource "azurerm_subnet_network_security_group_association" "aks" {
   subnet_id                 = azurerm_subnet.aks.id
   network_security_group_id = azurerm_network_security_group.platform.id
 }
-

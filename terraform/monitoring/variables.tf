@@ -22,6 +22,12 @@ variable "action_group_name" {
   default     = "ag-cib-platform-dev"
 }
 
+variable "metric_alert_name" {
+  description = "Name of the Azure Monitor metric alert."
+  type        = string
+  default     = "alert-high-cpu-dev"
+}
+
 variable "notification_email" {
   description = "Email address that receives example monitoring notifications."
   type        = string
@@ -42,4 +48,3 @@ variable "tags" {
     managedBy   = "terraform"
   }
 }
-

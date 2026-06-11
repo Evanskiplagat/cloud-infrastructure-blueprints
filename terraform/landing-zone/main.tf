@@ -22,7 +22,7 @@ resource "azurerm_storage_account" "platform" {
   account_kind                    = "StorageV2"
   allow_nested_items_to_be_public = false
   min_tls_version                 = "TLS1_2"
-  shared_access_key_enabled       = true
+  shared_access_key_enabled       = false
+  public_network_access_enabled   = false
   tags                            = var.tags
 }
-

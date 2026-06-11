@@ -1,4 +1,4 @@
-# Prometheus scrape configuration for Kubernetes workloads and self-monitoring.
+# Prometheus scrape configuration for self-monitoring and the demo workload.
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
@@ -19,4 +19,3 @@ scrape_configs:
     static_configs:
       - targets:
           - platform-web.platform-demo.svc.cluster.local:80
-

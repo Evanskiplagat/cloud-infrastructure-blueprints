@@ -5,9 +5,9 @@ metadata:
   name: platform-web
   namespace: platform-demo
   annotations:
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
+  ingressClassName: nginx
   tls:
     - hosts:
         - platform.example.com
@@ -23,4 +23,3 @@ spec:
                 name: platform-web
                 port:
                   number: 80
-
