@@ -16,6 +16,16 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
+      # Validate the Azure-native Bicep assets in a runner that already has Azure CLI available.
+      - name: Validate Bicep templates
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            set -euo pipefail
+            for file in azure/*/main.bicep; do
+              az bicep build --file "$file" >/dev/null
+            done
+
       # Run initialization without backend configuration because this is a portfolio repository.
       - name: Terraform init and validate
         shell: bash
@@ -35,3 +45,15 @@ jobs:
             -strict \
             -summary \
             $(find kubernetes -type f -name '*.yaml')
+
+      # Confirm the demo container still serves its health and metrics endpoints after hardening.
+      - name: Test demo container endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker build -t cloud-infrastructure-blueprints:test ./docker
+          container_id="$(docker run -d -p 18080:8080 cloud-infrastructure-blueprints:test)"
+          trap 'docker rm -f "$container_id"' EXIT
+          curl --fail --silent http://127.0.0.1:18080/healthz >/dev/null
+          metrics="$(curl --fail --silent http://127.0.0.1:18080/metrics)"
+          grep -Eq 'demo_http_requests_total [1-9][0-9]*' <<<"$metrics"

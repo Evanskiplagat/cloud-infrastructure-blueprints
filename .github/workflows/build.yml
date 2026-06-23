@@ -21,6 +21,16 @@ jobs:
       - name: Check Terraform formatting
         run: terraform fmt -check -recursive
 
+      # Ensure the Azure-native examples compile before they drift out of sync with the Terraform assets.
+      - name: Validate Bicep templates
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            set -euo pipefail
+            for file in azure/*/main.bicep; do
+              az bicep build --file "$file" >/dev/null
+            done
+
       # Lint YAML content to catch indentation and syntax issues early.
       - name: Lint YAML files
         uses: ibiqlik/action-yamllint@v3
@@ -32,3 +42,7 @@ jobs:
               line-length:
                 max: 160
                 level: warning
+
+      # Smoke-test the demo container build so the published image path remains deployable.
+      - name: Build demo container
+        run: docker build -t cloud-infrastructure-blueprints:test ./docker

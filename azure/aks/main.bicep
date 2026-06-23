@@ -5,6 +5,7 @@ param dnsPrefix string = 'cib-aks-dev'
 param kubernetesVersion string = '1.29.4'
 param agentCount int = 2
 param vmSize string = 'Standard_D4s_v5'
+param tenantId string
 
 resource aks 'Microsoft.ContainerService/managedClusters@2024-01-01' = {
   name: clusterName
@@ -15,6 +16,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2024-01-01' = {
   properties: {
     dnsPrefix: dnsPrefix
     kubernetesVersion: kubernetesVersion
+    disableLocalAccounts: true
     agentPoolProfiles: [
       {
         name: 'systempool'
@@ -25,12 +27,24 @@ resource aks 'Microsoft.ContainerService/managedClusters@2024-01-01' = {
         type: 'VirtualMachineScaleSets'
       }
     ]
+    aadProfile: {
+      managed: true
+      enableAzureRBAC: true
+      tenantID: tenantId
+    }
     networkProfile: {
       networkPlugin: 'azure'
       loadBalancerSku: 'standard'
+    }
+    oidcIssuerProfile: {
+      enabled: true
+    }
+    securityProfile: {
+      workloadIdentity: {
+        enabled: true
+      }
     }
   }
 }
 
 output aksId string = aks.id
-

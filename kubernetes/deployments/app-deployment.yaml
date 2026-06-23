@@ -20,6 +20,9 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: web
           # The CD workflow replaces this placeholder with the commit-specific image tag before rollout.

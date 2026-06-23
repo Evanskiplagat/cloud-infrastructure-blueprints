@@ -3,9 +3,31 @@
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
+from threading import Lock
 
 
 INDEX_HTML = Path("/app/index.html").read_text(encoding="utf-8")
+REQUEST_COUNT = 0
+REQUEST_COUNT_LOCK = Lock()
+
+
+def increment_request_count() -> None:
+    """Track every handled GET request so the demo metric behaves like a real counter."""
+    global REQUEST_COUNT
+    with REQUEST_COUNT_LOCK:
+        REQUEST_COUNT += 1
+
+
+def render_metrics() -> str:
+    """Render a minimal Prometheus exposition payload."""
+    with REQUEST_COUNT_LOCK:
+        request_count = REQUEST_COUNT
+
+    return (
+        "# HELP demo_http_requests_total Total HTTP requests served by the demo app.\n"
+        "# TYPE demo_http_requests_total counter\n"
+        f"demo_http_requests_total {request_count}\n"
+    )
 
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -20,6 +42,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(payload)
 
     def do_GET(self) -> None:  # noqa: N802 - HTTP handler method name is defined by BaseHTTPRequestHandler.
+        increment_request_count()
+
         if self.path == "/":
             self._write_response(INDEX_HTML, "text/html; charset=utf-8")
             return
@@ -29,12 +53,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             return
 
         if self.path == "/metrics":
-            metrics = (
-                "# HELP demo_http_requests_total Total HTTP requests served by the demo app.\n"
-                "# TYPE demo_http_requests_total counter\n"
-                "demo_http_requests_total 1\n"
-            )
-            self._write_response(metrics, "text/plain; version=0.0.4; charset=utf-8")
+            self._write_response(render_metrics(), "text/plain; version=0.0.4; charset=utf-8")
             return
 
         self._write_response("not found\n", "text/plain; charset=utf-8", status=HTTPStatus.NOT_FOUND)
