@@ -8,11 +8,12 @@ This repository intentionally includes operational guidance so the examples look
 - Prefer managed identities for AKS-integrated Azure resources.
 - Restrict storage account public access unless a workload explicitly requires it.
 - Rotate secrets and certificates through automated processes where possible.
+- Deny unintended east-west traffic with namespace-scoped network policies and keep ingress paths explicit.
 
 ## Operational Baseline
 
 - Tag all resources with environment, owner, cost-center, and business-service metadata.
 - Use health probes and autoscaling for containerized workloads.
+- Protect availability during node drains and maintenance with pod disruption budgets.
 - Export metrics and define alerts for availability, saturation, and deployment failures.
 - Keep runbooks alongside dashboards and alerts for faster incident response.
-

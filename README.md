@@ -54,7 +54,7 @@ flowchart LR
 | --- | --- |
 | `azure/` | Azure-native Bicep examples for core services and reference implementations |
 | `terraform/` | Infrastructure as code examples for landing zone, networking, AKS, and monitoring |
-| `kubernetes/` | Kubernetes manifests for workloads, ingress, namespaces, configuration, and scaling |
+| `kubernetes/` | Kubernetes manifests for workloads, ingress, namespaces, configuration, scaling, and security baselines |
 | `cicd/` | CI/CD implementation notes and release pipeline design guidance |
 | `.github/workflows/` | Executable GitHub Actions workflows for validation, build, image publishing, and deployment |
 | `monitoring/` | Prometheus configuration, Grafana dashboard assets, and alert rules |
@@ -68,6 +68,7 @@ flowchart LR
 - Building AKS environments with Terraform and managed identities
 - Implementing secure networking with VNets, subnets, and NSGs
 - Managing Kubernetes workloads using declarative manifests
+- Isolating workloads with Kubernetes network policies and disruption budgets
 - Automating validation, packaging, and deployment with GitHub Actions
 - Shipping monitoring baselines and actionable alert rules
 - Structuring infrastructure repositories for maintainability and reuse
@@ -85,4 +86,3 @@ flowchart LR
 - The Terraform examples use placeholder values where subscription-specific IDs are required.
 - The Kubernetes manifests use sample namespaces, image names, and TLS secret names that should be customized per environment.
 - The workflows are designed to be portfolio-grade examples and should be connected to real secrets before production use.
-

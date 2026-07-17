@@ -23,10 +23,12 @@ This document explains how the repository is organized and how the example asset
 - Resource names use a short environment suffix like `dev`, `test`, or `prod`.
 - Global tagging is applied through Terraform variables to keep governance consistent.
 - AKS deployment examples assume an Azure Container Registry integration pattern.
+- Kubernetes examples assume an ingress controller running in the `ingress-nginx` namespace so the sample network policy can allow only expected north-south traffic.
 
 ## Security Considerations
 
 - Store runtime secrets in Azure Key Vault or an external secrets operator rather than Git.
 - Use OIDC-based GitHub Actions federation instead of long-lived Azure service principal secrets where possible.
 - Restrict AKS ingress exposure with TLS, WAF, and IP filtering in production.
+- Apply namespace-scoped network policies and pod disruption budgets before exposing workloads through ingress.
 - The AKS deployment workflow creates `platform-web-secrets` from GitHub Actions secrets `PLATFORM_WEB_API_KEY` and `PLATFORM_WEB_DATABASE_URL`; keep `kubernetes/secrets/app-secret.example.yaml` as a local-only reference.

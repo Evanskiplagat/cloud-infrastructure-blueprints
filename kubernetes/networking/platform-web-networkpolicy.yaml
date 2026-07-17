@@ -1,0 +1,23 @@
+# Restrict inbound traffic to the sample workload to the ingress controller and same-namespace pods.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: platform-web-ingress
+  namespace: platform-demo
+spec:
+  podSelector:
+    matchLabels:
+      app: platform-web
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: platform-demo
+      ports:
+        - protocol: TCP
+          port: 8080
