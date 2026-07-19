@@ -86,3 +86,7 @@ flowchart LR
 - The Terraform examples use placeholder values where subscription-specific IDs are required.
 - The Kubernetes manifests use sample namespaces, image names, and TLS secret names that should be customized per environment.
 - The workflows are designed to be portfolio-grade examples and should be connected to real secrets before production use.
+
+## Additional Documents
+
+- [Snake species recognition PhD proposal](docs/snake-species-recognition-phd-proposal.md)
