@@ -15,8 +15,9 @@ This document explains how the repository is organized and how the example asset
 2. Build network foundations from `terraform/networking`.
 3. Deploy the AKS platform from `terraform/aks-cluster`.
 4. Apply workload manifests from `kubernetes/`.
-5. Enable monitoring from `monitoring/`.
-6. Connect the delivery flows in `.github/workflows/`.
+5. Provision Azure monitoring dependencies from `terraform/monitoring`.
+6. Layer Prometheus, Grafana, and alert assets from `monitoring/`.
+7. Connect the delivery flows in `.github/workflows/`.
 
 ## Environment Conventions
 

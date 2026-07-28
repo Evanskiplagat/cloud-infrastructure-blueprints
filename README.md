@@ -78,14 +78,16 @@ flowchart LR
 1. Review [docs/repository-guide.md](/c:/Users/HP/Documents/cib/cloud-infrastructure-blueprints/docs/repository-guide.md).
 2. Start with the Terraform examples in `terraform/`.
 3. Review Kubernetes deployment assets in `kubernetes/`.
-4. Inspect `.github/workflows/` for CI/CD patterns.
-5. Import the Grafana dashboard JSON after Prometheus is deployed.
+4. Inspect `.github/workflows/` and `cicd/github-actions/README.md` for CI/CD patterns and required secrets.
+5. Apply the Prometheus and alerting assets in `monitoring/`.
+6. Import the Grafana dashboard JSON after Prometheus is deployed.
 
 ## Notes
 
 - The Terraform examples use placeholder values where subscription-specific IDs are required.
 - The Kubernetes manifests use sample namespaces, image names, and TLS secret names that should be customized per environment.
 - The workflows are designed to be portfolio-grade examples and should be connected to real secrets before production use.
+- The AKS deployment workflow expects `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AKS_RESOURCE_GROUP`, `AKS_CLUSTER_NAME`, `PLATFORM_WEB_API_KEY`, and `PLATFORM_WEB_DATABASE_URL` to be configured as GitHub Actions secrets.
 
 ## Additional Documents
 
