@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - docker/**
-      - .github/workflows/docker-image.yml
   workflow_dispatch:
 
 jobs:
@@ -37,4 +34,3 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.sha }}
             ghcr.io/${{ github.repository }}:latest
-
