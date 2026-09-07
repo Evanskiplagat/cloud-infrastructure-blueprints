@@ -1,10 +1,10 @@
 # cloud-infrastructure-blueprints
 
-Production-oriented cloud engineering portfolio showcasing Azure platform design, Terraform infrastructure as code, Kubernetes operations, Docker packaging, GitHub Actions automation, monitoring, and operational guardrails.
+A collection of cloud infrastructure examples covering Azure, Terraform, Kubernetes, Docker, GitHub Actions, Prometheus, and Grafana.
 
 ## Project Overview
 
-This repository demonstrates how to structure reusable cloud blueprints for platform delivery. The examples are intentionally modular so they can be used independently in interviews, demos, or as starting points for real environments.
+This repository groups reusable examples for provisioning infrastructure, deploying workloads, automating delivery, and configuring monitoring.
 
 The portfolio emphasizes:
 
@@ -13,7 +13,7 @@ The portfolio emphasizes:
 - Kubernetes deployment, ingress, autoscaling, and secret handling
 - CI/CD automation with GitHub Actions
 - Observability with Prometheus, Grafana, and alerting rules
-- Documentation and repository hygiene expected in production teams
+- Supporting architecture and operational documentation
 
 ## Architecture Diagram
 
@@ -75,7 +75,7 @@ flowchart LR
 
 ## Getting Started
 
-1. Review [docs/repository-guide.md](/c:/Users/HP/Documents/cib/cloud-infrastructure-blueprints/docs/repository-guide.md).
+1. Review [the repository guide](docs/repository-guide.md).
 2. Start with the Terraform examples in `terraform/`.
 3. Review Kubernetes deployment assets in `kubernetes/`.
 4. Inspect `.github/workflows/` and `cicd/github-actions/README.md` for CI/CD patterns and required secrets.
@@ -86,9 +86,5 @@ flowchart LR
 
 - The Terraform examples use placeholder values where subscription-specific IDs are required.
 - The Kubernetes manifests use sample namespaces, image names, and TLS secret names that should be customized per environment.
-- The workflows are designed to be portfolio-grade examples and should be connected to real secrets before production use.
+- Configure the required repository secrets before running deployment workflows.
 - The AKS deployment workflow expects `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AKS_RESOURCE_GROUP`, `AKS_CLUSTER_NAME`, `PLATFORM_WEB_API_KEY`, and `PLATFORM_WEB_DATABASE_URL` to be configured as GitHub Actions secrets.
-
-## Additional Documents
-
-- [Snake species recognition PhD proposal](docs/snake-species-recognition-phd-proposal.md)
