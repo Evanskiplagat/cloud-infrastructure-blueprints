@@ -6,7 +6,7 @@ A collection of cloud infrastructure examples covering Azure, Terraform, Kuberne
 
 This repository groups reusable examples for provisioning infrastructure, deploying workloads, automating delivery, and configuring monitoring.
 
-The portfolio emphasizes:
+The repository covers:
 
 - Azure landing zone patterns and service composition
 - Terraform module design and environment parameterization
